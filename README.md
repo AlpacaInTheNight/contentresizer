@@ -70,7 +70,7 @@ If the resize method is set to "calculate" it will listens to the change of the 
 If the DOM element is already present in the cache - it will update it instead of creating an extra copy.
 
 ##### Calculate params
-`value: number | string | (number | string)[] | false;`
+##### `value: number | string | (number | string)[] | false;`
 Base value of the style.
 
 ##### `id: string;`
