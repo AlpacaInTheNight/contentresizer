@@ -1,0 +1,25 @@
+{
+	"compilerOptions": {
+		"target": "es2016",
+		"module": "ES2015",
+		"declaration": true,
+		"outDir": "./",
+		"strict": true,
+		"preserveConstEnums": true,
+		"suppressImplicitAnyIndexErrors": true,
+		"allowSyntheticDefaultImports": true,
+
+		"moduleResolution": "node",
+		"isolatedModules": false,
+		"experimentalDecorators": true,
+		"emitDecoratorMetadata": true,
+		"noImplicitAny": true,
+		"noImplicitUseStrict": false,
+		"removeComments": true,
+		"noLib": false,
+		"strictNullChecks": true,
+		"keyofStringsOnly": true,
+	},
+	"include": ["src"],
+	"exclude": ["node_modules", "**/__tests__/*"]
+}
