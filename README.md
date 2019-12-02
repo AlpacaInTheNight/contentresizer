@@ -69,30 +69,46 @@ Returns scaled style value based on provided params.
 If the resize method is set to "calculate" it will listens to the change of the scale and automatically update values.
 If the DOM element is already present in the cache - it will update it instead of creating an extra copy.
 
-Calculate params:
+##### Calculate params
 `value: number | string | (number | string)[] | false;`
 Base value of the style.
 
-`id: string;`
+##### `id: string;`
 Javascript name of the style
 
-`element: HTMLElement;`
+##### `element: HTMLElement;`
 Link to dom element containing target style
 
-`options?: ResizedListenerOptions;`
+##### `options?: ResizedListenerOptions;`
 Currently supports fallowing options:
 
-`min?: number | number[]`
+##### `min?: number | number[]`
 Sets minimal value or values
 
-`max?: number | number[];`
+##### `max?: number | number[];`
 Sets maximum value or values
 
-##### Examples:
+##### Examples
 ```javascript
-target.style.width = calc({value: 400, id: "width", element: target, options: {max: 800, min: 200}});
-text.style.padding = calc({value: [10, 5, 20, 20], id: "padding", element: text, options: {max: [40, 10, 20, 20]}});
-header.style.webkitTextStroke = calc({value: [1, "white"], id: "webkitTextStroke", element: header});
+target.style.width = calc({
+  value: 400,
+  id: "width",
+  element: target,
+  options: {max: 800, min: 200}
+});
+
+text.style.padding = calc({
+  value: [10, 5, 20, 20],
+  id: "padding",
+  element: text,
+  options: {max: [40, 10, 20, 20]}
+});
+
+header.style.webkitTextStroke = calc({
+  value: [1, "white"],
+  id: "webkitTextStroke",
+  element: header
+});
 ```
 
 #### `removeStalledLinks: () => void;`
