@@ -234,8 +234,11 @@ class ContentResizer {
                 return "";
             const { id, element, options } = calcParams;
             const { clearStalledTimeout = ContentResizer.DEFAULT_STALLED_TIMEOUT } = this.params;
-            if (this.params.resizeMethod !== "calculate")
-                return this.formStyleValue(value, id, options);
+            if (this.params.resizeMethod !== "calculate") {
+                const unScaledValue = this.formStyleValue(value, id, options);
+                element.style[id] = unScaledValue;
+                return unScaledValue;
+            }
             const self = this;
             if (this.timeout === false) {
                 this.timeout = setTimeout(self.removeStalledLinks, clearStalledTimeout);
@@ -261,7 +264,9 @@ class ContentResizer {
                     options
                 };
             }
-            return this.formStyleValue(value, id, options);
+            const formedValue = this.formStyleValue(value, id, options);
+            element.style[id] = formedValue;
+            return formedValue;
         };
         this.removeStalledLinks = () => {
             this.cachedResizeTargets = this.cachedResizeTargets.filter(item => document.contains(item.element));

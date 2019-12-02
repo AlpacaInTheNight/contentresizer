@@ -24,7 +24,7 @@ Determine the wrapper by the size of which the target container will be scaled t
 `none` - will do nothing.
 
 #### `autoScaleAxis?: "both" | "width" | "height";`
-The axis on which scale will be calculated.
+The axis on which scale will be calculated. Default is set to both.
 
 #### `autogenerate?: boolean;`
 If set to true - will create style resizers for the "calculate" method automatically.
@@ -43,6 +43,16 @@ Since calculate method caches elements which styles it tracks
 they need to be freed from cache after they are being remove from the document.
 This param set timeout in ms beetween cache clearing from the removed dom element after the new style recalucalation request.
 By default is 1s.
+
+```javascript
+const resizer = new ContentResizer({
+  width: 400,
+  height: 200,
+  container: target,
+  autoScaleBy: "parent",
+  autoScaleAxis: "width"
+});
+```
 
 ## Methods
 
@@ -65,7 +75,7 @@ Cycles through this.cachedResizeTargets and updates cached element's listened st
 Called automatically when new scale is being set.
 
 #### `calc: (calcParams: CalculateParams) => string;`
-Returns scaled style value based on provided params.
+Sets to target element and returns scaled style value based on provided params.
 If the resize method is set to "calculate" it will listens to the change of the scale and automatically update values.
 If the DOM element is already present in the cache - it will update it instead of creating an extra copy.
 
@@ -90,21 +100,21 @@ Sets maximum value or values
 
 ##### Examples
 ```javascript
-target.style.width = calc({
+resizer.calc({
   value: 400,
   id: "width",
   element: target,
   options: {max: 800, min: 200}
 });
 
-text.style.padding = calc({
+resizer.calc({
   value: [10, 5, 20, 20],
   id: "padding",
   element: text,
   options: {max: [40, 10, 20, 20]}
 });
 
-header.style.webkitTextStroke = calc({
+resizer.calc({
   value: [1, "white"],
   id: "webkitTextStroke",
   element: header

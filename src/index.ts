@@ -361,7 +361,12 @@ export default class ContentResizer {
 		const {id, element, options} = calcParams;
 		const {clearStalledTimeout = ContentResizer.DEFAULT_STALLED_TIMEOUT} = this.params;
 		
-		if(this.params.resizeMethod !== "calculate") return this.formStyleValue(value, id, options);
+		if(this.params.resizeMethod !== "calculate") {
+			const unScaledValue = this.formStyleValue(value, id, options);
+			element.style[id] = unScaledValue;
+			return unScaledValue;
+		}
+
 		const self = this;
 
 		if(this.timeout === false) {
@@ -391,7 +396,9 @@ export default class ContentResizer {
 			};
 		}
 
-		return this.formStyleValue(value, id, options);
+		const formedValue = this.formStyleValue(value, id, options);
+		element.style[id] = formedValue;
+		return formedValue;
 	}
 
 	/**
