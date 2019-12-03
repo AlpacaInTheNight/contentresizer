@@ -43,7 +43,8 @@ Since calculate method caches elements which styles it tracks
 they need to be freed from cache after they are being remove from the document.
 This param set timeout in ms beetween cache clearing from the removed dom element after the new style recalucalation request.
 By default is 1s.
-
+  
+Autoscale by wrapper width of target container by recalculating style values
 ```javascript
 const resizer = new ContentResizer({
   width: 400,
@@ -52,8 +53,26 @@ const resizer = new ContentResizer({
   autoScaleBy: "parent",
   autoScaleAxis: "width"
 });
+  
+resizer.calc({
+  value: 400,
+  id: "width",
+  element: target,
+  options: {max: 800, min: 200}
+});
 ```
-
+  
+Autoscale by page body keeping original container sides ratio of target container using transform method
+```javascript
+const resizer = new ContentResizer({
+  resizeMethod: "transform",
+  width: 400,
+  height: 200,
+  container: target,
+  autoScaleBy: "body"
+});
+```
+  
 ## Methods
 
 #### `static setResizeObserverPolyfill(polyfill: any): void;`
@@ -84,19 +103,19 @@ If the DOM element is already present in the cache - it will update it instead o
 Base value of the style.
 
 ##### `id: string;`
-Javascript name of the style
+Javascript name of the style.
 
 ##### `element: HTMLElement;`
-Link to dom element containing target style
+Link to dom element containing target style.
 
 ##### `options?: ResizedListenerOptions;`
 Currently supports fallowing options:
 
 ##### `min?: number | number[]`
-Sets minimal value or values
+Sets minimal value or values.
 
 ##### `max?: number | number[];`
-Sets maximum value or values
+Sets maximum value or values.
 
 ##### Examples
 ```javascript
@@ -122,4 +141,48 @@ resizer.calc({
 ```
 
 #### `removeStalledLinks: () => void;`
-Frees removed dom elements from memory
+Frees removed dom elements from memory.
+
+## Style formatters
+
+When `calc` is being called, it checks style id and searches for a style formatter that supports this style. It calls the formatter `calculate` method if it supports the target style.
+
+
+### Style formatter specification
+
+#### `id: string;`
+Unique id for the formatter object.
+
+#### `style: string | string[];`
+CSS style or an array of styles in Javascript format that formatter must handle.
+
+#### `calculate: (value: number | string | (number | string)[] , scale: number, options?: ResizedListenerOptions) => string;`
+Function that will be called by the calc method for specific styles. See `calc` method for the description.
+
+#### `generate: (styleValue: string) => string | number | (string | number)[] | false;`
+Function that will be called for the specific style when `autogenerate` param is set to true. Gets CSS style value and returns its parsed value that a calculate function expects to receive.
+
+### Methods for working with style formatters
+
+#### `getFormatters: (clone?: boolean | undefined) => StyleFormatter[];`
+Returns array of style formatters. If called with the true param will return clone.
+
+#### `setFormatters: (formatters: StyleFormatter[]) => void;`
+Sets array of style formatters.
+
+#### `getFormatterById(id: string, clone?: boolean): StyleFormatter | false;`
+Returns style formatter by id. If second param is set to true will return clone.
+
+#### `setFormatterById(formatter: StyleFormatter): void;`
+Updates formatter.
+
+#### `addFormatter: (formatter: StyleFormatter) => void;`
+Registers new formatter.
+
+### Base formatters
+
+#### General
+Listens to styles that are formed as a value or a list of values separated by a space.
+
+#### Matrix
+Handles `transform` style.
