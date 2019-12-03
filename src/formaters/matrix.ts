@@ -1,4 +1,4 @@
-import { ResizedListenerOptions, CalculateValue, StyleParser } from '../index';
+import { ResizedListenerOptions, CalculateValue, StyleFormatter } from '../index';
 
 const PRECISION = 8;
 
@@ -88,11 +88,11 @@ function generate(styleValue: string) {
 	return values;
 }
 
-const parserMatrix: StyleParser = {
+const formatterMatrix: StyleFormatter = {
 	id: "translate",
 	style: "transform",
 	calculate,
 	generate
 };
 
-export default parserMatrix;
+export default formatterMatrix;

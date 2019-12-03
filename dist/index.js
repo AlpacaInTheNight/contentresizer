@@ -60,7 +60,7 @@
 	    }
 	    return valuesArr.length > 1 ? valuesArr : valuesArr[0];
 	}
-	const parser = {
+	const formatter = {
 	    id: "general",
 	    isDefault: true,
 	    style: resizableStyles,
@@ -134,7 +134,7 @@
 	    }
 	    return values;
 	}
-	const parserMatrix = {
+	const formatterMatrix = {
 	    id: "translate",
 	    style: "transform",
 	    calculate: calculate$1,
@@ -145,23 +145,23 @@
 	    constructor(params) {
 	        this.scale = 1;
 	        this.timeout = false;
-	        this.parsers = [];
+	        this.formatters = [];
 	        this.watchedStyles = [];
 	        this.lastWidth = 1;
 	        this.lastHeight = 1;
 	        this.cachedResizeTargets = [];
-	        this.getParsers = (clone) => {
+	        this.getFormatters = (clone) => {
 	            if (clone)
-	                return ContentResizer.clone(this.parsers);
+	                return ContentResizer.clone(this.formatters);
 	            else
-	                return this.parsers;
+	                return this.formatters;
 	        };
-	        this.setParsers = (parsers) => {
-	            this.parsers = parsers;
+	        this.setFormatters = (formatters) => {
+	            this.formatters = formatters;
 	            this.setWatchedStyles();
 	        };
-	        this.addParser = (parser) => {
-	            this.parsers.unshift(parser);
+	        this.addFormatter = (formatter) => {
+	            this.formatters.unshift(formatter);
 	            this.setWatchedStyles();
 	        };
 	        this.setScale = (scale) => {
@@ -307,10 +307,10 @@
 	            const { resizeMethod } = this.params;
 	            if (resizeMethod !== "calculate")
 	                scale = 1;
-	            for (const parser of this.parsers) {
-	                if ((Array.isArray(parser.style) && parser.style.includes(styleID)) ||
-	                    (typeof parser.style === "string" && parser.style === styleID)) {
-	                    return parser.calculate(value, scale, options);
+	            for (const formatter of this.formatters) {
+	                if ((Array.isArray(formatter.style) && formatter.style.includes(styleID)) ||
+	                    (typeof formatter.style === "string" && formatter.style === styleID)) {
+	                    return formatter.calculate(value, scale, options);
 	                }
 	            }
 	            return "";
@@ -333,10 +333,10 @@
 	                for (const styleID of self.watchedStyles) {
 	                    if (!computed[styleID])
 	                        continue;
-	                    self.parsers.some(parser => {
-	                        if ((Array.isArray(parser.style) && parser.style.includes(styleID)) ||
-	                            (typeof parser.style === "string" && parser.style === styleID)) {
-	                            self.calc({ value: parser.generate(computed[styleID]), id: styleID, element: node });
+	                    self.formatters.some(formatter => {
+	                        if ((Array.isArray(formatter.style) && formatter.style.includes(styleID)) ||
+	                            (typeof formatter.style === "string" && formatter.style === styleID)) {
+	                            self.calc({ value: formatter.generate(computed[styleID]), id: styleID, element: node });
 	                            return true;
 	                        }
 	                        return false;
@@ -347,16 +347,16 @@
 	        };
 	        this.setWatchedStyles = () => {
 	            const watchedStyles = [];
-	            for (const parser of this.parsers) {
-	                if (Array.isArray(parser.style)) {
-	                    for (const style of parser.style) {
+	            for (const formatter of this.formatters) {
+	                if (Array.isArray(formatter.style)) {
+	                    for (const style of formatter.style) {
 	                        if (!watchedStyles.includes(style))
 	                            watchedStyles.push(style);
 	                    }
 	                }
 	                else {
-	                    if (!watchedStyles.includes(parser.style))
-	                        watchedStyles.push(parser.style);
+	                    if (!watchedStyles.includes(formatter.style))
+	                        watchedStyles.push(formatter.style);
 	                }
 	            }
 	            this.watchedStyles = watchedStyles;
@@ -370,8 +370,8 @@
 	        if (!params.clearStalledTimeout)
 	            params.clearStalledTimeout = ContentResizer.DEFAULT_STALLED_TIMEOUT;
 	        this.params = params;
-	        this.addParser(parser);
-	        this.addParser(parserMatrix);
+	        this.addFormatter(formatter);
+	        this.addFormatter(formatterMatrix);
 	        if (this.params.autogenerate)
 	            this.autoGenerate();
 	        if (!this.params.width) {
@@ -401,20 +401,19 @@
 	    static clone(data) {
 	        return JSON.parse(JSON.stringify(data));
 	    }
-	    getParserById(id, clone) {
-	        const targetParser = this.parsers.find(parser => parser.id === id);
-	        if (!targetParser)
+	    getFormatterById(id, clone) {
+	        const targetFormatter = this.formatters.find(formatter => formatter.id === id);
+	        if (!targetFormatter)
 	            return false;
 	        if (clone)
-	            return JSON.parse(JSON.stringify(targetParser));
+	            return JSON.parse(JSON.stringify(targetFormatter));
 	        else
-	            return targetParser;
+	            return targetFormatter;
 	    }
-	    setParserById(parser, setId) {
-	        const id = setId || parser.id;
-	        for (const i in this.parsers) {
-	            if (this.parsers[i].id === id)
-	                this.parsers[i] = parser;
+	    setFormatterById(formatter) {
+	        for (const i in this.formatters) {
+	            if (this.formatters[i].id === formatter.id)
+	                this.formatters[i] = formatter;
 	        }
 	        this.setWatchedStyles();
 	    }

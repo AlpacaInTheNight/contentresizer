@@ -1,4 +1,4 @@
-import { ResizedListenerOptions, CalculateValue, StyleParser } from '../index';
+import { ResizedListenerOptions, CalculateValue, StyleFormatter } from '../index';
 
 const resizableStyles: string[] = [
 	"width",
@@ -63,7 +63,7 @@ function generate(styleValue: string) {
 	return valuesArr.length > 1 ? valuesArr : valuesArr[0];
 }
 
-const parser: StyleParser = {
+const formatter: StyleFormatter = {
 	id: "general",
 	isDefault: true,
 	style: resizableStyles,
@@ -71,4 +71,4 @@ const parser: StyleParser = {
 	generate
 };
 
-export default parser;
+export default formatter;

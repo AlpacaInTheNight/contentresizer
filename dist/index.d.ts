@@ -1,4 +1,4 @@
-export declare type StyleParser = {
+export declare type StyleFormatter = {
     id: string;
     isDefault?: boolean;
     style: string | string[];
@@ -42,7 +42,7 @@ export default class ContentResizer {
     private scale;
     private timeout;
     private params;
-    private parsers;
+    private formatters;
     private watchedStyles;
     private lastWidth;
     private lastHeight;
@@ -50,11 +50,11 @@ export default class ContentResizer {
     constructor(params: ResizerParams);
     static setResizeObserverPolyfill(polyfill: any): void;
     private static clone;
-    getParsers: (clone?: boolean | undefined) => StyleParser[];
-    setParsers: (parsers: StyleParser[]) => void;
-    getParserById(id: string, clone?: boolean): StyleParser | false;
-    setParserById(parser: StyleParser, setId?: string): void;
-    addParser: (parser: StyleParser) => void;
+    getFormatters: (clone?: boolean | undefined) => StyleFormatter[];
+    setFormatters: (formatters: StyleFormatter[]) => void;
+    getFormatterById(id: string, clone?: boolean): StyleFormatter | false;
+    setFormatterById(formatter: StyleFormatter): void;
+    addFormatter: (formatter: StyleFormatter) => void;
     setScale: (scale: number) => void;
     updateContainerScale: () => void;
     updateListenedElements: () => void;

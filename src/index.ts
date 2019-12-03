@@ -1,7 +1,7 @@
-import parserGeneral from './formaters/general';
-import parserTransform from './formaters/matrix';
+import formatterGeneral from './formaters/general';
+import formatterTransform from './formaters/matrix';
 
-export type StyleParser = {
+export type StyleFormatter = {
 	id: string;
 	isDefault?: boolean;
 	style: string | string[];
@@ -128,12 +128,12 @@ export default class ContentResizer {
 	private params: ResizerParams;
 
 	/**
-	 * An array of Style Parser objects
+	 * An array of Style Formatter objects
 	 */
-	private parsers: StyleParser[] = [];
+	private formatters: StyleFormatter[] = [];
 
 	/**
-	 * List of styles to be tracked for auto-resize. Generated based on provided parsers
+	 * List of styles to be tracked for auto-resize. Generated based on provided formatters
 	 */
 	private watchedStyles: string[] = [];
 
@@ -153,8 +153,8 @@ export default class ContentResizer {
 		if(!params.clearStalledTimeout) params.clearStalledTimeout = ContentResizer.DEFAULT_STALLED_TIMEOUT;
 		this.params = params;
 
-		this.addParser(parserGeneral);
-		this.addParser(parserTransform);
+		this.addFormatter(formatterGeneral);
+		this.addFormatter(formatterTransform);
 
 		if(this.params.autogenerate) this.autoGenerate();
 
@@ -202,57 +202,56 @@ export default class ContentResizer {
 	}
 
 	/**
-	 * Returns style parsers array
+	 * Returns style formatters array
 	 * @param clone - if set to true will return clone instead of a link
 	 */
-	public getParsers = (clone?: boolean): StyleParser[] => {
-		if(clone) return ContentResizer.clone(this.parsers);
-		else return this.parsers;
+	public getFormatters = (clone?: boolean): StyleFormatter[] => {
+		if(clone) return ContentResizer.clone(this.formatters);
+		else return this.formatters;
 	}
 
 	/**
-	 * Sets style parsers array
-	 * @param parsers - new parsers object
+	 * Sets style formatters array
+	 * @param formatters - new formatters object
 	 */
-	public setParsers = (parsers: StyleParser[]) => {
-		this.parsers = parsers;
+	public setFormatters = (formatters: StyleFormatter[]) => {
+		this.formatters = formatters;
 		this.setWatchedStyles();
 	}
 
 	/**
-	 * Returns specific style parser by id
-	 * @param id - target parser id
+	 * Returns specific style formatter by id
+	 * @param id - target formatter id
 	 * @param clone - if set to true will return clone instead of a link
 	 */
-	public getParserById(id: string, clone?: boolean): StyleParser | false {
-		const targetParser = this.parsers.find(parser => parser.id === id);
-		if(!targetParser) return false;
+	public getFormatterById(id: string, clone?: boolean): StyleFormatter | false {
+		const targetFormatter = this.formatters.find(formatter => formatter.id === id);
+		if(!targetFormatter) return false;
 
-		if(clone) return JSON.parse(JSON.stringify(targetParser));
-		else return targetParser;
+		if(clone) return JSON.parse(JSON.stringify(targetFormatter));
+		else return targetFormatter;
 	}
 
 	/**
-	 * Replaces target style parser
-	 * @param parser - style parser object
-	 * @param id - if set will replace parser with this id instead of the one with id set in the parser object
+	 * Replaces target style formatter
+	 * @param formatter - style formatter object
+	 * @param id - if set will replace formatter with this id instead of the one with id set in the formatter object
 	 */
-	public setParserById(parser: StyleParser, setId?: string) {
-		const id = setId || parser.id;
+	public setFormatterById(formatter: StyleFormatter) {
 
-		for(const i in this.parsers) {
-			if(this.parsers[i].id === id) this.parsers[i] = parser;
+		for(const i in this.formatters) {
+			if(this.formatters[i].id === formatter.id) this.formatters[i] = formatter;
 		}
 
 		this.setWatchedStyles();
 	}
 
 	/**
-	 * Registers new style parser
-	 * @param parser - StyleParser object
+	 * Registers new style formatter
+	 * @param formatter - StyleFormatter object
 	 */
-	public addParser = (parser: StyleParser) => {
-		this.parsers.unshift(parser);
+	public addFormatter = (formatter: StyleFormatter) => {
+		this.formatters.unshift(formatter);
 		this.setWatchedStyles();
 	}
 
@@ -442,25 +441,25 @@ export default class ContentResizer {
 	}
 
 	/**
-	 * Checks list of style parsers to see if any is listening to the target style
-	 * and if so - calls calculate method of the target style parser.
+	 * Checks list of style formatters to see if any is listening to the target style
+	 * and if so - calls calculate method of the target style formatter.
 	 * It is intended to be used with the calculate method.
 	 * If resizeMethod is anything but "calculate" - scale will be considered to be 1 regardless of its actual value
 	 * @param value - CalculateValue
 	 * @param styleID - target style name in JS naming
-	 * @param options - options for the style parser calculate method
+	 * @param options - options for the style formatter calculate method
 	 */
 	private formStyleValue = (value: CalculateValue, styleID: string, options?: ResizedListenerOptions): string => {
 		let {scale} = this;
 		const {resizeMethod} = this.params;
 		if(resizeMethod !== "calculate") scale = 1;
 
-		for(const parser of this.parsers) {
+		for(const formatter of this.formatters) {
 			if(
-				(Array.isArray(parser.style) && parser.style.includes(styleID)) ||
-				(typeof parser.style === "string" && parser.style === styleID)
+				(Array.isArray(formatter.style) && formatter.style.includes(styleID)) ||
+				(typeof formatter.style === "string" && formatter.style === styleID)
 			) {
-				return parser.calculate(value, scale, options);
+				return formatter.calculate(value, scale, options);
 			}
 		}
 
@@ -492,12 +491,12 @@ export default class ContentResizer {
 			for(const styleID of self.watchedStyles) {
 				if(!computed[styleID]) continue;
 
-				self.parsers.some(parser => {
+				self.formatters.some(formatter => {
 					if(
-						(Array.isArray(parser.style) && parser.style.includes(styleID)) ||
-						(typeof parser.style === "string" && parser.style === styleID)
+						(Array.isArray(formatter.style) && formatter.style.includes(styleID)) ||
+						(typeof formatter.style === "string" && formatter.style === styleID)
 					) {
-						self.calc({value: parser.generate(computed[styleID]), id: styleID, element: node});
+						self.calc({value: formatter.generate(computed[styleID]), id: styleID, element: node});
 						return true;
 					}
 
@@ -510,18 +509,18 @@ export default class ContentResizer {
 	}
 
 	/**
-	 * Updates watched styles based on "style" property of the style parser objects in the this.parsers array
+	 * Updates watched styles based on "style" property of the style formatter objects in the this.formatters array
 	 */
 	private setWatchedStyles = () => {
 		const watchedStyles: string[] = [];
 		
-		for(const parser of this.parsers) {
-			if(Array.isArray(parser.style)) {
-				for(const style of parser.style) {
+		for(const formatter of this.formatters) {
+			if(Array.isArray(formatter.style)) {
+				for(const style of formatter.style) {
 					if(!watchedStyles.includes(style)) watchedStyles.push(style);
 				}
 			} else {
-				if(!watchedStyles.includes(parser.style)) watchedStyles.push(parser.style);
+				if(!watchedStyles.includes(formatter.style)) watchedStyles.push(formatter.style);
 			}
 		}
 

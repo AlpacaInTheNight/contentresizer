@@ -1,3 +1,3 @@
-import { StyleParser } from '../index';
-declare const parserMatrix: StyleParser;
-export default parserMatrix;
+import { StyleFormatter } from '../index';
+declare const formatterMatrix: StyleFormatter;
+export default formatterMatrix;
