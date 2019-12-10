@@ -13,6 +13,7 @@
 	    "border",
 	    "outline",
 	    "webkitTextStroke",
+	    "webkitTextStrokeWidth"
 	];
 	const PRECISION = 8;
 	function calculate(value, scale, options) {

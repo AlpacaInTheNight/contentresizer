@@ -9,6 +9,7 @@ const resizableStyles: string[] = [
 	"border",
 	"outline",
 	"webkitTextStroke",
+	"webkitTextStrokeWidth"
 	/* "backgroundSize",
 	"backgroundPosition" */
 ];
