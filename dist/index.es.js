@@ -7,7 +7,9 @@ const resizableStyles = [
     "border",
     "outline",
     "webkitTextStroke",
-    "webkitTextStrokeWidth"
+    "webkitTextStrokeWidth",
+    "backgroundSize",
+    "backgroundPosition"
 ];
 const PRECISION = 8;
 function calculate(value, scale, options) {

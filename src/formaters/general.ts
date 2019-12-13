@@ -9,9 +9,9 @@ const resizableStyles: string[] = [
 	"border",
 	"outline",
 	"webkitTextStroke",
-	"webkitTextStrokeWidth"
-	/* "backgroundSize",
-	"backgroundPosition" */
+	"webkitTextStrokeWidth",
+	"backgroundSize",
+	"backgroundPosition"
 ];
 
 const PRECISION = 8;
