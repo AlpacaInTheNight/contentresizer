@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	
+	<title>Resizer Demo</title>
+
+<script>window.exports = {}</script>
+<script src="../../index.js" ></script>
+
+<style>
+	#container {
+		width: 400px;
+		background-color: magenta;
+	}
+
+	#translate {
+		position: absolute;
+		background-color: red;
+		width: 50px;
+		height: 50px;
+		transform: translate(150px, 10px);
+	}
+</style>
+
+</head>
+
+<body class="base">
+
+	<input id="scale" type="number" value="1.42" /><button id="scaleMe">Set Scale</button>
+
+	<div id="container" style="height: 200px;">
+		<div id="translate"></div>
+		<h1>Header</h1>
+		<div style="background-color: grey; font-size: 15px; padding: 10px 5px 20px 20px;">
+			Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+		</div>
+	</div>
+	
+</body>
+</html>
+
+<script src="app.js" ></script>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	
+	<title>Resizer Demo</title>
+	
+<script src="../../dist/index.js" ></script>
+
+<style>
+	body {
+		width: 100vw;
+		height: 100vh;
+		margin: 0;
+		padding: 0;
+		overflow: hidden;
+	}
+
+	#parent {
+		background-color: azure;
+		width: 50%;
+		height: 500px;
+		min-width: 600px;
+		max-width: 800px;
+		outline: 1px solid red;
+	}
+
+	#container {
+		transform-origin: left top;
+	}
+</style>
+</head>
+
+<body class="base">
+
+	<input id="scale" type="number" value="1.42" /><button id="scaleMe">Set Scale</button> <br />
+	<button id="resizeMe">Resize Container</button>
+
+	<div id="parent">
+		<div id="container">
+			<div id="translate"></div>
+			<h1>Header</h1>
+			<div id="child">
+				Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+			</div>
+		</div>
+	</div>
+	
+</body>
+</html>
+
+<script src="app.js" ></script>
