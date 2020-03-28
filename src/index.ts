@@ -120,7 +120,7 @@ export default class ContentResizer {
 	 */
 	private scale: number = 1;
 
-	private timeout: NodeJS.Timeout | false = false;
+	private timeout: NodeJS.Timeout | number | false = false;
 
 	/**
 	 * Params provided to the constructor

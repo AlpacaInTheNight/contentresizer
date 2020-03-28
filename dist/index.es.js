@@ -13,10 +13,9 @@ const resizableStyles = [
 ];
 const PRECISION = 8;
 function calculate(value, scale, options) {
-    var _a, _b, _c, _d;
     if (Array.isArray(value)) {
-        const max = ((_a = options) === null || _a === void 0 ? void 0 : _a.max) && Array.isArray(options.max) ? options.max : undefined;
-        const min = ((_b = options) === null || _b === void 0 ? void 0 : _b.min) && Array.isArray(options.min) ? options.min : undefined;
+        const max = (options === null || options === void 0 ? void 0 : options.max) && Array.isArray(options.max) ? options.max : undefined;
+        const min = (options === null || options === void 0 ? void 0 : options.min) && Array.isArray(options.min) ? options.min : undefined;
         const cloneArr = value.slice();
         for (const i in cloneArr) {
             if (typeof cloneArr[i] === "number") {
@@ -32,13 +31,13 @@ function calculate(value, scale, options) {
     }
     if (typeof value === "number") {
         let scaled = value * scale;
-        if ((_c = options) === null || _c === void 0 ? void 0 : _c.max) {
+        if (options === null || options === void 0 ? void 0 : options.max) {
             if (typeof options.max === "number" && scaled > options.max)
                 scaled = options.max;
             if (Array.isArray(options.max) && scaled > options.max[0])
                 scaled = options.max[0];
         }
-        if ((_d = options) === null || _d === void 0 ? void 0 : _d.min) {
+        if (options === null || options === void 0 ? void 0 : options.min) {
             if (typeof options.min === "number" && scaled < options.min)
                 scaled = options.min;
             if (Array.isArray(options.min) && scaled < options.min[0])
@@ -71,7 +70,6 @@ const TRANSLATEX = 4;
 const TRANSLATEY = 5;
 const ERR_UNSUPPORTED_FORMAT = new Error('Usupported matrix format');
 function setMatrix(value, scale, options) {
-    var _a, _b;
     const matrixArr = value.slice();
     let scaledTrX = matrixArr[TRANSLATEX] * scale;
     let scaledTrY = matrixArr[TRANSLATEY] * scale;
@@ -87,9 +85,9 @@ function setMatrix(value, scale, options) {
         if (boundY && (type === "max" && scaledTrY > boundY) || (type === "min" && scaledTrY < boundY))
             scaledTrY = boundY;
     }
-    if (((_a = options) === null || _a === void 0 ? void 0 : _a.max) && Array.isArray(options.max))
+    if ((options === null || options === void 0 ? void 0 : options.max) && Array.isArray(options.max))
         setMinMax(options.max, "max");
-    if (((_b = options) === null || _b === void 0 ? void 0 : _b.min) && Array.isArray(options.min))
+    if ((options === null || options === void 0 ? void 0 : options.min) && Array.isArray(options.min))
         setMinMax(options.min, "min");
     matrixArr[TRANSLATEX] = parseFloat(scaledTrX.toFixed(PRECISION$1));
     matrixArr[TRANSLATEY] = parseFloat(scaledTrY.toFixed(PRECISION$1));
